@@ -1,0 +1,33 @@
+#!/bin/bash
+
+readonly prefix_path=${0%/*}
+source ${prefix_path}/paths.sh
+
+readonly gtest_version="1.10.0"  # "${0##*-}" from filename
+readonly gtest_dir="googletest-release-${gtest_version}"
+
+
+gtest_fetch()
+{
+  curl \
+    --silent \
+    --location \
+    https://github.com/google/googletest/archive/release-${gtest_version}.tar.gz \
+    |tar -xz --directory ${source_dir}
+}
+
+gtest_configure()
+{
+  cmake \
+    -S "${source_dir}/${gtest_dir}" \
+    -B "${build_dir}/${gtest_dir}"
+}
+
+gtest_install()
+{
+  make \
+    --directory "${build_dir}/${gtest_dir}" \
+    install DESTDIR="${install_dir}/${gtest_dir}"
+}
+
+main_for gtest "${@}"

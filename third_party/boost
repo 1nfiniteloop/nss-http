@@ -1,0 +1,36 @@
+#!/bin/bash
+
+readonly prefix_path=${0%/*}
+source ${prefix_path}/paths.sh
+
+readonly boost_version="1.75.0"
+readonly boost_dir="boost_${boost_version//./_}"
+
+
+boost_fetch()
+{
+  curl \
+      --silent \
+      --location \
+      https://boostorg.jfrog.io/artifactory/main/release/${boost_version}/source/${boost_dir}.tar.gz \
+      |tar -xz --directory ${source_dir}
+}
+
+boost_configure()
+{
+  pushd ${source_dir}/${boost_dir}
+  ./bootstrap.sh
+  popd
+}
+
+boost_install()
+{
+  pushd ${source_dir}/${boost_dir}
+    ./b2 cxxflags=-fPIC link=static install \
+      --build-dir=${build_dir}/${boost_dir} \
+      --prefix=${install_dir}/${boost_dir} \
+      --with-json
+  popd
+}
+
+main_for boost "${@}"

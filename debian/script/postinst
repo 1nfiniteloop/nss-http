@@ -1,0 +1,3 @@
+#!/bin/bash
+
+chown :shadow /etc/nss-http/shadow.auth-token.base64

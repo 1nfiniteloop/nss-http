@@ -1,0 +1,4 @@
+add_subdirectory(libnss_http)
+add_subdirectory(nss_api)
+add_subdirectory(unix_account)
+add_subdirectory(unix_account_http)

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+readonly prefix_path=${0%/*}
+source ${prefix_path}/paths.sh
+
+readonly cpr_version="1.6.2"  # "${0##*-}" from filename
+readonly cpr_dir="cpr-${cpr_version}"
+
+
+cpr_fetch()
+{
+  curl \
+    --silent \
+    --location \
+    https://github.com/whoshuu/cpr/archive/refs/tags/${cpr_version}.tar.gz \
+    |tar -xz --directory ${source_dir}
+}
+
+cpr_configure()
+{
+  cmake \
+    -D CMAKE_C_FLAGS="-fPIC" \
+    -D CMAKE_CXX_FLAGS="-fPIC" \
+    -D BUILD_SHARED_LIBS=OFF \
+    -D CPR_BUILD_TESTS=OFF \
+    -D CPR_BUILD_TESTS_SSL=OFF \
+    -S "${source_dir}/${cpr_dir}" \
+    -B "${build_dir}/${cpr_dir}"
+}
+
+cpr_install()
+{
+  make \
+    --directory "${build_dir}/${cpr_dir}" \
+    install DESTDIR="${install_dir}/${cpr_dir}"
+}
+
+main_for cpr "${@}"

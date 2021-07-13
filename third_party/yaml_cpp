@@ -1,0 +1,36 @@
+#!/bin/bash
+
+readonly prefix_path=${0%/*}
+source ${prefix_path}/paths.sh
+
+readonly yaml_cpp_version="0.6.3"
+readonly yaml_cpp_dir="yaml-cpp-${yaml_cpp_version}"
+
+
+yaml_cpp_fetch()
+{
+  curl \
+    --silent \
+    --location \
+    https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-${yaml_cpp_version}.tar.gz \
+    |tar -xz --directory ${source_dir}
+}
+
+yaml_cpp_configure()
+{
+  cmake \
+    -D CMAKE_CXX_FLAGS="-fPIC" \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D YAML_CPP_BUILD_TESTS=NO \
+    -S "${source_dir}/yaml-cpp-${yaml_cpp_dir}" \
+    -B "${build_dir}/${yaml_cpp_dir}"
+}
+
+yaml_cpp_install()
+{
+  make \
+    --directory "${build_dir}/${yaml_cpp_dir}" \
+    install DESTDIR="${install_dir}/${yaml_cpp_dir}"
+}
+
+main_for yaml_cpp "${@}"

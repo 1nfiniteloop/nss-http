@@ -1,0 +1,11 @@
+endpoints:
+  url: http://unix-account.lan:8025
+  group: /api/group
+  user: /api/user
+  password: /api/password
+
+tls:
+  dir: /etc/nss-http/certs
+  cert: unix-account.lan.cert.pem
+  key: unix-account.lan.key.pem
+  ca_cert: unix-account.lan.ca_chain.pem
