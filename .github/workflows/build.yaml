@@ -2,7 +2,6 @@ name: Build app
 
 on:
   push:
-    branches: main
     tags:
       - 'v*'
 
@@ -79,3 +78,24 @@ jobs:
                 -S nss-http \
                 -B nss-http/build/Release \
               && make --directory=nss-http/build/Release package'
+
+      # ref: https://github.com/actions/create-release
+      - name: Create release
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+
+      # ref: https://github.com/actions/upload-release-asset
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: ./build/Release/nss-http-1.0.0-Linux.deb
+          asset_name: nss-http-1.0.0-Linux.deb
+          asset_content_type: application/gzip
