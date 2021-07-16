@@ -14,6 +14,7 @@ Get debian package from latest release below, or build local debian package, see
     curl \
       --silent \
       --remote-name \
+      --location \
       https://github.com/1nfiniteloop/nss-http/releases/download/v1.0.0/nss-http-1.0.0-Linux.deb
 
 Install package
