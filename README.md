@@ -43,19 +43,16 @@ Errors are written to syslog tagged as "nss-http".
 
 ## Additional configurations
 
-It's also convenient to get a home folder created for new users, configure
-`/etc/pam.d/login` according to below. See more @
+It's also convenient to create a home folder for new users, add line below
+at the end of `/etc/pam.d/common-session`. See more @
 <http://linux-pam.org/Linux-PAM-html/sag-pam_mkhomedir.html>
 
     ...
     # Create home for new users
     session    required    pam_mkhomedir.so skel=/etc/skel/ umask=0022
 
-    # Standard Un*x authentication.
-    @include common-auth
-
-It is recommended to use nss-http plugin with name service cache daemon
-`nscd`. Install with:
+It is __strongly recommended__ to install name service cache daemon `nscd` when
+using this nss plugin, install with:
 
     sudo apt-get install nscd
 
